@@ -3,7 +3,7 @@
 # save current directory
 ROOT_DIR="$(pwd)"
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting gitrunner"
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting gitrunner (firstrun: $firstrun)"
 
 # check if required files exist
 if [[ ! -f repositories.txt ]]; then
@@ -18,6 +18,15 @@ fi
 
 # loop over each repo listed in repositories.txt
 while IFS= read -r repo || [[ -n "$repo" ]]; do
+    # set the runproc flag
+    runproc=false
+    if [[ "$repo" == \** ]]; then
+        repo="${repo#\*}"   # Remove the leading '*'
+        if [[ "$firstrun" == true ]]; then
+            runproc=true           # Set the other variable to true
+        fi
+    fi
+
     # skip empty lines
     [[ -z "$repo" ]] && continue
 
@@ -41,7 +50,10 @@ while IFS= read -r repo || [[ -n "$repo" ]]; do
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] No changes in $repo."
     else
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Changes detected in $repo."
+        runproc=true
+    fi
 
+    if [[ "$runproc" == true ]]; then
         # find matching line in proc.txt
         PROC_CMD=$(grep "^$repo:" "$ROOT_DIR/proc.txt" | cut -d':' -f2-)
 
