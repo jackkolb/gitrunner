@@ -1,0 +1,6 @@
+*
+!.gitignore
+!gitrunner.sh
+!gitrunner-loop.sh
+!README.md
+
