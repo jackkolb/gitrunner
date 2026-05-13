@@ -1,3 +1,4 @@
+source ./gitrunner.bashrc
 export firstrun=true
 while true; do
     ./gitrunner.sh
