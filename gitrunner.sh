@@ -42,7 +42,7 @@ while IFS= read -r repo || [[ -n "$repo" ]]; do
     cd "$REPO_PATH" || continue
 
     # run git pull and capture output
-    PULL_OUTPUT=$(git pull)
+    PULL_OUTPUT=$(git fetch --all && git reset --hard origin/main)
 
     echo "$PULL_OUTPUT"
 
